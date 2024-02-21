@@ -7,6 +7,11 @@ import { shallowEqual, useSelector } from 'react-redux'
 import { isMobile } from '../../../utils/helps'
 import { initGameData } from '../../../utils/games'
 import PropTypes from 'prop-types'
+import { track } from '../../../mixpanel'
+
+
+
+
 
 const Button = ({ color, size, top, left, label, position, arrow, type }) => {
   const [active, setActive] = useState(false)
@@ -20,6 +25,9 @@ const Button = ({ color, size, top, left, label, position, arrow, type }) => {
         control['todo'][type]()
       } else {
         control[initGameData[game].name][type]()
+        if (type === 'p') {
+          track('Start Game', { game:initGameData[game].name })
+        }
       }
     },
     [pause, game.name]
